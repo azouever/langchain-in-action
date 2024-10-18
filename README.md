@@ -1,3 +1,12 @@
+
+# modify by azou
+
+1. use requirements_v0.2.txt
+
+
+
+
+
 # LangChain实战课
 
 
