@@ -2,6 +2,7 @@
 # modify by azou
 
 1. use requirements_v0.2.txt
+2. create a .env file and add some environment variables
 
 
 
