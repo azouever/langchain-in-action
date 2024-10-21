@@ -1,12 +1,23 @@
-'''欢迎来到LangChain实战课
+import os
+
+from dotenv import load_dotenv  # 用于加载环境变量
+from langchain.globals import set_debug, set_verbose
+
+set_debug(True)
+set_verbose(True)
+load_dotenv()  # 加载 .env 文件中的环境变量
+
+os.environ["LANGCHAIN_TRACING_V2"] = "false"
+"""欢迎来到LangChain实战课
 https://time.geekbang.org/column/intro/100617601
-作者 黄佳'''
+作者 黄佳"""
 # 导入HuggingFace API Token
 import os
-os.environ['HUGGINGFACEHUB_API_TOKEN'] = 'Your HuggingFace API Token'
+
+os.environ["HUGGINGFACEHUB_API_TOKEN"] = "Your HuggingFace API Token"
 
 # 导入必要的库
-from transformers import AutoTokenizer, AutoModelForCausalLM
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
 # 加载预训练模型的分词器
 tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-chat-hf")
@@ -14,8 +25,8 @@ tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-chat-hf")
 # 加载预训练的模型
 # 使用 device_map 参数将模型自动加载到可用的硬件设备上，例如GPU
 model = AutoModelForCausalLM.from_pretrained(
-          "meta-llama/Llama-2-7b-chat-hf", 
-          device_map = 'auto')  
+    "meta-llama/Llama-2-7b-chat-hf", device_map="auto"
+)
 
 # 定义一个提示，希望模型基于此提示生成故事
 prompt = "请给我讲个玫瑰的爱情故事?"
