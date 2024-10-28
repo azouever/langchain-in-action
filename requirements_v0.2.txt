@@ -48,6 +48,7 @@ langchain-qdrant==0.1.4
 langchain-chroma==0.1.4
 langserve==0.3.0
 langsmith==0.1.135
+langgraph==0.2.39
 
 
 # openai lib 
