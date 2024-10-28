@@ -1,35 +1,33 @@
-import os
-from langchain.globals import set_debug, set_verbose
-from dotenv import load_dotenv  # 用于加载环境变量
-
-set_debug(True)
-set_verbose(True)
-load_dotenv()  # 加载 .env 文件中的环境变量
-
-os.environ["LANGCHAIN_TRACING_V2"] = "false"
-import os
-from langchain.globals import set_debug, set_verbose
-from dotenv import load_dotenv  # 用于加载环境变量
-
-set_debug(True)
-set_verbose(True)
-load_dotenv()  # 加载 .env 文件中的环境变量
-
-os.environ["LANGCHAIN_TRACING_V2"] = "false"
-# 导入所需的库和模块
-from flask import Flask, render_template, request, jsonify
-from findbigV import find_bigV
 import json
+import os
+
+from dotenv import load_dotenv  # 用于加载环境变量
+from findbigV import find_bigV
+from flask import Flask, jsonify, render_template, request
+from langchain.globals import set_debug, set_verbose
+
+set_debug(True)
+set_verbose(True)
+load_dotenv()  # 加载 .env 文件中的环境变量
+
+os.environ["LANGCHAIN_TRACING_V2"] = "false"
+
+# 导入所需的库和模块
 
 # 实例化Flask应用
 app = Flask(__name__)
 
 # 主页路由，返回index.html模板
+
+
 @app.route("/")
 def index():
     return render_template("index.html")
 
+
 # 处理请求的路由，仅允许POST请求
+
+
 @app.route("/process", methods=["POST"])
 def process():
     # 获取提交的花的名称
@@ -47,7 +45,8 @@ def process():
             "interest": response["interest"],
             "letter": response["letter"],
         }
-    )    
+    )
+
 
 # 判断是否是主程序运行，并设置Flask应用的host和debug模式
 if __name__ == "__main__":

@@ -1,38 +1,23 @@
 import os
-from langchain.globals import set_debug, set_verbose
+from typing import List
+
 from dotenv import load_dotenv  # 用于加载环境变量
+from langchain.chat_models import ChatOpenAI
+from langchain.globals import set_debug, set_verbose
+from langchain.prompts.chat import (
+    HumanMessagePromptTemplate,
+    SystemMessagePromptTemplate,
+)
+from langchain.schema import AIMessage, BaseMessage, HumanMessage, SystemMessage
 
 set_debug(True)
 set_verbose(True)
 load_dotenv()  # 加载 .env 文件中的环境变量
 
 os.environ["LANGCHAIN_TRACING_V2"] = "false"
-import os
-from langchain.globals import set_debug, set_verbose
-from dotenv import load_dotenv  # 用于加载环境变量
-
-set_debug(True)
-set_verbose(True)
-load_dotenv()  # 加载 .env 文件中的环境变量
-
-os.environ["LANGCHAIN_TRACING_V2"] = "false"
-# 设置OpenAI API密钥
-import os
-os.environ["OPENAI_API_KEY"] = 'Your OpenAI Key'
 
 # 导入所需的库
-from typing import List
-from langchain.chat_models import ChatOpenAI
-from langchain.prompts.chat import (
-    SystemMessagePromptTemplate,
-    HumanMessagePromptTemplate,
-)
-from langchain.schema import (
-    AIMessage,
-    HumanMessage,
-    SystemMessage,
-    BaseMessage,
-)
+
 
 # 定义CAMELAgent类，用于管理与语言模型的交互
 class CAMELAgent:
@@ -67,7 +52,8 @@ class CAMELAgent:
         self.update_messages(output_message)
 
         return output_message
-    
+
+
 # 设置一些预设的角色和任务提示
 assistant_role_name = "花店营销专员"
 user_role_name = "花店老板"
@@ -83,7 +69,9 @@ task_specifier_prompt = """这是一个{assistant_role_name}将帮助{user_role_
 task_specifier_template = HumanMessagePromptTemplate.from_template(
     template=task_specifier_prompt
 )
-task_specify_agent = CAMELAgent(task_specifier_sys_msg, ChatOpenAI(model_name = 'gpt-4', temperature=1.0))
+task_specify_agent = CAMELAgent(
+    task_specifier_sys_msg, ChatOpenAI(model_name="gpt-4", temperature=1.0)
+)
 task_specifier_msg = task_specifier_template.format_messages(
     assistant_role_name=assistant_role_name,
     user_role_name=user_role_name,
@@ -165,6 +153,7 @@ def get_sys_msgs(assistant_role_name: str, user_role_name: str, task: str):
 
     return assistant_sys_msg, user_sys_msg
 
+
 assistant_sys_msg, user_sys_msg = get_sys_msgs(
     assistant_role_name, user_role_name, specified_task
 )
@@ -179,11 +168,7 @@ user_agent.reset()
 
 # 初始化对话互动
 assistant_msg = HumanMessage(
-    content=(
-        f"{user_sys_msg.content}。"
-        "现在开始逐一给我介绍。"
-        "只回复指令和输入。"
-    )
+    content=(f"{user_sys_msg.content}。" "现在开始逐一给我介绍。" "只回复指令和输入。")
 )
 
 user_msg = HumanMessage(content=f"{assistant_sys_msg.content}")
@@ -202,6 +187,7 @@ while n < chat_turn_limit:
 
     assistant_ai_msg = assistant_agent.step(user_msg)
     assistant_msg = HumanMessage(content=assistant_ai_msg.content)
-    print(f"AI Assistant ({assistant_role_name}):\n\n{assistant_msg.content}\n\n")
+    print(
+        f"AI Assistant ({assistant_role_name}):\n\n{assistant_msg.content}\n\n")
     if "<CAMEL_TASK_DONE>" in user_msg.content:
         break

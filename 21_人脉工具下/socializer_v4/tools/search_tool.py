@@ -1,15 +1,8 @@
 import os
-from langchain.globals import set_debug, set_verbose
-from dotenv import load_dotenv  # 用于加载环境变量
 
-set_debug(True)
-set_verbose(True)
-load_dotenv()  # 加载 .env 文件中的环境变量
-
-os.environ["LANGCHAIN_TRACING_V2"] = "false"
-import os
-from langchain.globals import set_debug, set_verbose
 from dotenv import load_dotenv  # 用于加载环境变量
+from langchain.globals import set_debug, set_verbose
+from langchain.utilities import SerpAPIWrapper
 
 set_debug(True)
 set_verbose(True)
@@ -17,9 +10,10 @@ load_dotenv()  # 加载 .env 文件中的环境变量
 
 os.environ["LANGCHAIN_TRACING_V2"] = "false"
 # 导入SerpAPIWrapper
-from langchain.utilities import SerpAPIWrapper
 
 # 重新定制SerpAPIWrapper，重构_process_response，返回URL
+
+
 class CustomSerpAPIWrapper(SerpAPIWrapper):
     def __init__(self):
         super(CustomSerpAPIWrapper, self).__init__()
@@ -101,7 +95,7 @@ class CustomSerpAPIWrapper(SerpAPIWrapper):
             first_organic_result = res["organic_results"][0]
             if "snippet" in first_organic_result.keys():
                 # snippets.append(first_organic_result["snippet"])
-                snippets.append(first_organic_result["link"])                
+                snippets.append(first_organic_result["link"])
             elif "snippet_highlighted_words" in first_organic_result.keys():
                 snippets.append(first_organic_result["snippet_highlighted_words"])
             elif "rich_snippet" in first_organic_result.keys():
@@ -120,7 +114,10 @@ class CustomSerpAPIWrapper(SerpAPIWrapper):
         else:
             return "No good search result found"
 
+
 # 获取与某种鲜花相关的微博UID的函数
+
+
 def get_UID(flower: str):
     # search = SerpAPIWrapper()
     search = CustomSerpAPIWrapper()

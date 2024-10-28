@@ -1,39 +1,24 @@
-import os
-from langchain.globals import set_debug, set_verbose
-from dotenv import load_dotenv  # 用于加载环境变量
-
-set_debug(True)
-set_verbose(True)
-load_dotenv()  # 加载 .env 文件中的环境变量
-
-os.environ["LANGCHAIN_TRACING_V2"] = "false"
-import os
-from langchain.globals import set_debug, set_verbose
-from dotenv import load_dotenv  # 用于加载环境变量
-
-set_debug(True)
-set_verbose(True)
-load_dotenv()  # 加载 .env 文件中的环境变量
-
-os.environ["LANGCHAIN_TRACING_V2"] = "false"
-# 设置OpenAI API密钥
-import os
-os.environ["OPENAI_API_KEY"] = 'Your OpenAI Key'
-
 import asyncio
+import os
+
+from dotenv import load_dotenv  # 用于加载环境变量
 from langchain import OpenAI
+from langchain.callbacks import get_openai_callback
 from langchain.chains import ConversationChain
 from langchain.chains.conversation.memory import ConversationBufferMemory
-from langchain.callbacks import get_openai_callback
+from langchain.globals import set_debug, set_verbose
+
+set_debug(True)
+set_verbose(True)
+load_dotenv()  # 加载 .env 文件中的环境变量
+
+os.environ["LANGCHAIN_TRACING_V2"] = "false"
 
 # 初始化大语言模型
-llm = OpenAI(temperature=0.5, model_name="text-davinci-003")
+llm = OpenAI(temperature=0.5, model="gpt-3.5-turbo-instruct")
 
 # 初始化对话链
-conversation = ConversationChain(
-    llm=llm,
-    memory=ConversationBufferMemory()
-)
+conversation = ConversationChain(llm=llm, memory=ConversationBufferMemory())
 
 # 使用context manager进行token counting
 with get_openai_callback() as cb:
@@ -48,19 +33,22 @@ with get_openai_callback() as cb:
 
     # 回合3 （第二天的对话）
     conversation("我又来了，还记得我昨天为什么要来买花吗？")
-    print("/n第三次对话后时提示:/n",conversation.prompt.template)
+    print("/n第三次对话后时提示:/n", conversation.prompt.template)
     print("/n第三次对话后的记忆:/n", conversation.memory.buffer)
 
 # 输出使用的tokens
 print("\n总计使用的tokens:", cb.total_tokens)
 
 # 进行更多的异步交互和token计数
+
+
 async def additional_interactions():
     with get_openai_callback() as cb:
         await asyncio.gather(
             *[llm.agenerate(["我姐姐喜欢什么颜色的花？"]) for _ in range(3)]
         )
     print("\n另外的交互中使用的tokens:", cb.total_tokens)
+
 
 # 运行异步函数
 asyncio.run(additional_interactions())
