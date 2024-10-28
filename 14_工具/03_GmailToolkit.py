@@ -1,33 +1,24 @@
 import os
-from langchain.globals import set_debug, set_verbose
+
 from dotenv import load_dotenv  # 用于加载环境变量
+from langchain.agents import AgentType, initialize_agent
+from langchain.agents.agent_toolkits import GmailToolkit
+from langchain.chat_models import ChatOpenAI
+from langchain.globals import set_debug, set_verbose
+from langchain.tools.gmail.utils import build_resource_service, get_gmail_credentials
 
 set_debug(True)
 set_verbose(True)
 load_dotenv()  # 加载 .env 文件中的环境变量
 
 os.environ["LANGCHAIN_TRACING_V2"] = "false"
-import os
-from langchain.globals import set_debug, set_verbose
-from dotenv import load_dotenv  # 用于加载环境变量
-
-set_debug(True)
-set_verbose(True)
-load_dotenv()  # 加载 .env 文件中的环境变量
-
-os.environ["LANGCHAIN_TRACING_V2"] = "false"
-# 设置OpenAI API的密钥
-import os 
-os.environ["OPENAI_API_KEY"] = 'Your Key' 
 
 # 导入与Gmail交互所需的工具包
-from langchain.agents.agent_toolkits import GmailToolkit
 
 # 初始化Gmail工具包
 toolkit = GmailToolkit()
 
 # 从gmail工具中导入一些有用的功能
-from langchain.tools.gmail.utils import build_resource_service, get_gmail_credentials
 
 # 获取Gmail API的凭证，并指定相关的权限范围
 credentials = get_gmail_credentials(
@@ -44,11 +35,9 @@ tools = toolkit.get_tools()
 print(tools)
 
 # 导入与聊天模型相关的包
-from langchain.chat_models import ChatOpenAI
-from langchain.agents import initialize_agent, AgentType
 
 # 初始化聊天模型
-llm = ChatOpenAI(temperature=0, model='gpt-4')
+llm = ChatOpenAI(temperature=0, model="gpt-4")
 
 # 通过指定的工具和聊天模型初始化agent
 agent = initialize_agent(
@@ -58,9 +47,7 @@ agent = initialize_agent(
 )
 
 # 使用agent运行一些查询或指令
-result = agent.run(
-    "今天易速鲜花客服给我发邮件了么？最新的邮件是谁发给我的？"
-)
+result = agent.run("今天易速鲜花客服给我发邮件了么？最新的邮件是谁发给我的？")
 
 # 打印结果
-print(result)  
+print(result)

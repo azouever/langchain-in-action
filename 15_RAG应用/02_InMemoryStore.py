@@ -1,33 +1,23 @@
 import os
-from langchain.globals import set_debug, set_verbose
+
 from dotenv import load_dotenv  # 用于加载环境变量
+from langchain.embeddings import CacheBackedEmbeddings, OpenAIEmbeddings
+from langchain.globals import set_debug, set_verbose
+from langchain.storage import InMemoryStore
 
 set_debug(True)
 set_verbose(True)
 load_dotenv()  # 加载 .env 文件中的环境变量
 
 os.environ["LANGCHAIN_TRACING_V2"] = "false"
-import os
-from langchain.globals import set_debug, set_verbose
-from dotenv import load_dotenv  # 用于加载环境变量
 
-set_debug(True)
-set_verbose(True)
-load_dotenv()  # 加载 .env 文件中的环境变量
-
-os.environ["LANGCHAIN_TRACING_V2"] = "false"
-# 设置OpenAI的API密钥
-import os
-os.environ["OPENAI_API_KEY"] = 'Your OpenAI Key'
 
 # 导入内存存储库，该库允许我们在RAM中临时存储数据
-from langchain.storage import InMemoryStore
 
 # 创建一个InMemoryStore的实例
 store = InMemoryStore()
 
 # 导入与嵌入相关的库。OpenAIEmbeddings是用于生成嵌入的工具，而CacheBackedEmbeddings允许我们缓存这些嵌入
-from langchain.embeddings import OpenAIEmbeddings, CacheBackedEmbeddings
 
 # 创建一个OpenAIEmbeddings的实例，这将用于实际计算文档的嵌入
 underlying_embeddings = OpenAIEmbeddings()
@@ -38,7 +28,7 @@ underlying_embeddings = OpenAIEmbeddings()
 embedder = CacheBackedEmbeddings.from_bytes_store(
     underlying_embeddings,  # 实际生成嵌入的工具
     store,  # 嵌入的缓存位置
-    namespace=underlying_embeddings.model  # 嵌入缓存的命名空间
+    namespace=underlying_embeddings.model,  # 嵌入缓存的命名空间
 )
 
 # 使用embedder为两段文本生成嵌入。

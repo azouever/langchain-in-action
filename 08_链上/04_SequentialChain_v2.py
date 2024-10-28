@@ -1,7 +1,11 @@
 import os
 
 from dotenv import load_dotenv  # 用于加载环境变量
+from langchain.chains import LLMChain, SequentialChain
 from langchain.globals import set_debug, set_verbose
+from langchain_core.prompts import PromptTemplate
+from langchain_core.runnables import RunnablePassthrough
+from langchain_openai import OpenAI
 
 set_debug(True)
 set_verbose(True)
@@ -12,10 +16,6 @@ os.environ["LANGCHAIN_TRACING_V2"] = "false"
 https://time.geekbang.org/column/intro/100617601
 作者 黄佳"""
 
-from langchain.chains import LLMChain, SequentialChain
-from langchain_core.prompts import PromptTemplate
-from langchain_core.runnables import RunnablePassthrough
-from langchain_openai import OpenAI
 
 # 导入所需要的库
 

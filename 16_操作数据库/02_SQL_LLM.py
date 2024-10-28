@@ -1,19 +1,18 @@
 import os
-from langchain.globals import set_debug, set_verbose
+
 from dotenv import load_dotenv  # 用于加载环境变量
+from langchain.globals import set_debug, set_verbose
+from langchain.llms import OpenAI
+from langchain.utilities import SQLDatabase
+from langchain_experimental.sql import SQLDatabaseChain
 
 set_debug(True)
 set_verbose(True)
 load_dotenv()  # 加载 .env 文件中的环境变量
 
 os.environ["LANGCHAIN_TRACING_V2"] = "false"
-import os
-os.environ["OPENAI_API_KEY"] = 'Your OpenAI Key'
 
 # 导入langchain的实用工具和相关的模块
-from langchain.utilities import SQLDatabase
-from langchain.llms import OpenAI
-from langchain_experimental.sql import SQLDatabaseChain
 
 # 连接到FlowerShop数据库（之前我们使用的是Chinook.db）
 db = SQLDatabase.from_uri("sqlite:///FlowerShop.db")
@@ -41,7 +40,7 @@ response = db_chain.run("哪种鲜花的销售量最高？")
 print(response)
 
 
-'''> Entering new SQLDatabaseChain chain...
+"""> Entering new SQLDatabaseChain chain...
 有多少种不同的鲜花？
 SQLQuery:SELECT COUNT(DISTINCT "Name") FROM "Flowers";
 SQLResult: [(5,)]
@@ -83,4 +82,4 @@ SQLQuery:SELECT "Name", "SoldQuantity" FROM "Flowers" ORDER BY "SoldQuantity" DE
 SQLResult: [('Tulip', 25), ('Daisy', 15), ('Rose', 10), ('Lily', 5), ('Orchid', 2)]
 Answer:Tulip的销售量最高。
 > Finished chain.
-Tulip的销售量最高。'''
+Tulip的销售量最高。"""
