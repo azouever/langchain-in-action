@@ -50,6 +50,7 @@ langserve==0.3.0
 langsmith==0.1.135
 langgraph==0.2.39
 
+grandalf==0.8
 
 # openai lib 
 openai==1.51.2
