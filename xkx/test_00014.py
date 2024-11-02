@@ -1,5 +1,7 @@
 from typing import List, Literal
 
+from dotenv import load_dotenv  # 用于加载环境变量
+from langchain.globals import set_debug, set_verbose
 from langchain_core.messages import HumanMessage
 from langchain_core.messages.base import BaseMessage
 from langchain_core.runnables import RunnableLambda
@@ -7,9 +9,6 @@ from langchain_core.tools import tool
 from langchain_openai import ChatOpenAI
 from langgraph.graph import END, MessageGraph
 from langgraph.prebuilt import ToolNode
-
-from langchain.globals import set_debug, set_verbose
-from dotenv import load_dotenv  # 用于加载环境变量
 
 set_debug(True)
 set_verbose(True)
